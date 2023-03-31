@@ -10,7 +10,7 @@ export class UsersService extends BaseService {
     super();
   }
 
-  async create(user: User) {
+  async create(user) {
     const SALT_ROUND = 10;
     user.password = await bcrypt.hash(user.password, SALT_ROUND);
     return this.userModel.create(user);
