@@ -1,4 +1,4 @@
-import { IsString } from "class-validator";
+import { IsString, MinLength } from "class-validator";
 
 export class RegisterDto {
   @IsString()
@@ -8,6 +8,7 @@ export class RegisterDto {
   readonly name: string;
 
   @IsString()
+  @MinLength(8)
   readonly password: string;
 }
 
