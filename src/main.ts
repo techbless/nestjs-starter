@@ -25,7 +25,15 @@ async function bootstrap() {
     new ValidationPipe({
       transform: true,
       exceptionFactory: errors => {
-        return new CustomError(HttpStatus.BAD_REQUEST, "Invalid Input", JSON.stringify(errors[0].constraints));
+        let message = "";
+
+        for (const error of errors) {
+          Object.entries(error.constraints).forEach(([key, value]) => {
+            message += value += ". ";
+          });
+        }
+
+        return new CustomError(HttpStatus.BAD_REQUEST, "Invalid Input", message);
       },
     }),
   );
