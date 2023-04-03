@@ -4,6 +4,8 @@ import * as session from "express-session";
 import * as passport from "passport";
 import * as compression from "compression";
 import * as cookieParser from "cookie-parser";
+import RedisClient from "./common/redis";
+import RedisStore from "connect-redis";
 import { AllExceptionsFilter } from "./filters/all.exception.filter";
 import { HttpStatus, ValidationPipe } from "@nestjs/common";
 import CustomError from "./common/custom.error";
@@ -13,8 +15,12 @@ async function bootstrap() {
     logger: ["error", "warn"],
   });
 
+  const redisClient = await RedisClient.getRedisClient();
+  const redisStore = new RedisStore({ client: redisClient });
+
   app.use(
     session({
+      store: redisStore,
       secret: process.env.SESSION_SECRET,
       resave: false,
       saveUninitialized: false,
