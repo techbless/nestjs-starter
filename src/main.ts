@@ -8,22 +8,13 @@ import RedisClient from "./common/redis";
 import RedisStore from "connect-redis";
 import { AllExceptionsFilter } from "./filters/all.exception.filter";
 import { HttpStatus, ValidationPipe } from "@nestjs/common";
-import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import CustomError from "./common/custom.error";
+import { SwaggerAPIDocumentation } from "./common/swagger.ducument";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: ["error", "warn"],
   });
-
-  const config = new DocumentBuilder()
-    .setTitle("NestJs Starter")
-    .setDescription("Boiler Plate of Nest.js")
-    .setVersion("1.0")
-    .build();
-
-  const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup("docs", app, document);
 
   const redisClient = await RedisClient.getRedisClient();
   const redisStore = new RedisStore({ client: redisClient });
@@ -60,6 +51,8 @@ async function bootstrap() {
   app.use(passport.session());
 
   app.useGlobalFilters(new AllExceptionsFilter());
+
+  new SwaggerAPIDocumentation(app, "docs");
   await app.listen(3000);
 }
 
