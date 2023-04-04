@@ -1,55 +1,24 @@
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
-import * as session from "express-session";
 import * as passport from "passport";
 import * as compression from "compression";
 import * as cookieParser from "cookie-parser";
-import RedisClient from "./common/redis";
-import RedisStore from "connect-redis";
 import { AllExceptionsFilter } from "./filters/all.exception.filter";
-import { HttpStatus, ValidationPipe } from "@nestjs/common";
-import CustomError from "./common/custom.error";
 import { SwaggerAPIDocumentation } from "./common/swagger.ducument";
+import { RedisSession } from "./common/redis.session";
+import { Validation } from "./common/validation.pipe";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: ["error", "warn"],
   });
 
-  const redisClient = await RedisClient.getRedisClient();
-  const redisStore = new RedisStore({ client: redisClient });
-
-  app.use(
-    session({
-      store: redisStore,
-      secret: process.env.SESSION_SECRET,
-      resave: false,
-      saveUninitialized: false,
-    }),
-  );
-
-  app.useGlobalPipes(
-    new ValidationPipe({
-      transform: true,
-      exceptionFactory: errors => {
-        let message = "";
-
-        for (const error of errors) {
-          Object.entries(error.constraints).forEach(([key, value]) => {
-            message += value += ". ";
-          });
-        }
-
-        return new CustomError(HttpStatus.BAD_REQUEST, "Invalid Input", message);
-      },
-    }),
-  );
-
+  await new RedisSession(app).setRedisnStore();
+  new Validation(app);
   app.use(cookieParser());
   app.use(compression());
   app.use(passport.initialize());
   app.use(passport.session());
-
   app.useGlobalFilters(new AllExceptionsFilter());
 
   new SwaggerAPIDocumentation(app, "docs");
