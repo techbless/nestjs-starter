@@ -5,6 +5,7 @@ import { AuthenticatedGuard, LocalAuthGuard } from "./guards";
 import CustomError from "../common/custom.error";
 import { LoginDto, LoginResponseDto, MeResponseDto, RegisterDto, RegisterResponseDto } from "./dto/auth.dto";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
+import { ErrorDto } from "../common/dto/error.dto";
 
 @ApiTags("Authentication")
 @Controller("auth")
@@ -47,6 +48,7 @@ export class AuthController extends BaseController {
   }
 
   @ApiResponse({ type: MeResponseDto })
+  @ApiResponse({ status: 401, type: ErrorDto })
   @ApiOperation({ summary: "Get the user logged in to the current session" })
   @UseGuards(AuthenticatedGuard)
   @Get("/me")
