@@ -15,7 +15,7 @@ export class RedisSession {
     return new RedisStore({ client: redisClient });
   }
 
-  public async setRedisnStore() {
+  public async setRedisStore() {
     const redisStore = await this.getRedisStore();
     this.app.use(
       session({

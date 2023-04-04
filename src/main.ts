@@ -13,7 +13,7 @@ async function bootstrap() {
     logger: ["error", "warn"],
   });
 
-  await new RedisSession(app).setRedisnStore();
+  await new RedisSession(app).setRedisStore();
   new Validation(app);
   app.use(cookieParser());
   app.use(compression());
