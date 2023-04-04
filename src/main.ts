@@ -8,12 +8,22 @@ import RedisClient from "./common/redis";
 import RedisStore from "connect-redis";
 import { AllExceptionsFilter } from "./filters/all.exception.filter";
 import { HttpStatus, ValidationPipe } from "@nestjs/common";
+import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
 import CustomError from "./common/custom.error";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, {
     logger: ["error", "warn"],
   });
+
+  const config = new DocumentBuilder()
+    .setTitle("NestJs Starter")
+    .setDescription("Boiler Plate of Nest.js")
+    .setVersion("1.0")
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup("docs", app, document);
 
   const redisClient = await RedisClient.getRedisClient();
   const redisStore = new RedisStore({ client: redisClient });
