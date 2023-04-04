@@ -43,3 +43,46 @@ export class LoginDto {
   @IsString()
   readonly password: string;
 }
+
+export class MeResponseDto {
+  @ApiProperty()
+  userNo: number;
+
+  @ApiProperty()
+  username: string;
+
+  @ApiProperty()
+  name: string;
+
+  @ApiProperty()
+  createdAt: string;
+
+  @ApiProperty()
+  updatedAt: string;
+}
+
+export class RegisterResponseDto {
+  @ApiProperty()
+  userNo: number;
+  @ApiProperty()
+  username: string;
+  @ApiProperty()
+  name: string;
+  @ApiProperty()
+  createdAt: string;
+  @ApiProperty()
+  updatedAt: string;
+}
+
+export class LoginResponseDto {
+  @ApiProperty()
+  userNo: number;
+  @ApiProperty()
+  username: string;
+  @ApiProperty()
+  name: string;
+  @ApiProperty()
+  createdAt: string;
+  @ApiProperty()
+  updatedAt: string;
+}

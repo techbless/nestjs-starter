@@ -3,7 +3,7 @@ import { BaseController } from "../common/controller";
 import { UsersService } from "../users/users.service";
 import { AuthenticatedGuard, LocalAuthGuard } from "./guards";
 import CustomError from "../common/custom.error";
-import { LoginDto, RegisterDto } from "./dto/auth.dto";
+import { LoginDto, LoginResponseDto, MeResponseDto, RegisterDto, RegisterResponseDto } from "./dto/auth.dto";
 import { ApiOperation, ApiResponse, ApiTags } from "@nestjs/swagger";
 
 @ApiTags("Authentication")
@@ -14,15 +14,14 @@ export class AuthController extends BaseController {
   }
 
   @ApiOperation({ summary: "Sign up as a user" })
-  @ApiResponse({
-    status: 201,
-  })
+  @ApiResponse({ type: RegisterResponseDto })
   @Post("/register")
   async create(@Body() user: RegisterDto) {
     return this.usersService.create(user);
   }
 
   @ApiOperation({ summary: "Sign in" })
+  @ApiResponse({ type: LoginResponseDto })
   @UseGuards(LocalAuthGuard)
   @Post("/login")
   async login(@Req() req, @Body() user: LoginDto) {
@@ -30,6 +29,7 @@ export class AuthController extends BaseController {
   }
 
   @ApiOperation({ summary: "logout" })
+  @ApiResponse({ type: Boolean })
   @Get("/logout")
   async logout(@Req() req, @Res() res) {
     if (!req.isAuthenticated()) {
@@ -46,6 +46,7 @@ export class AuthController extends BaseController {
     });
   }
 
+  @ApiResponse({ type: MeResponseDto })
   @ApiOperation({ summary: "Get the user logged in to the current session" })
   @UseGuards(AuthenticatedGuard)
   @Get("/me")
