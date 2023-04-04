@@ -6,6 +6,8 @@ import { AuthModule } from "./auth/auth.module";
 import { SequelizeModule } from "@nestjs/sequelize";
 import { User } from "./users/user.model";
 import { ConfigModule } from "@nestjs/config";
+import { ServeStaticModule } from "@nestjs/serve-static";
+import { join } from "path";
 
 @Module({
   imports: [
@@ -20,6 +22,9 @@ import { ConfigModule } from "@nestjs/config";
       autoLoadModels: true,
       synchronize: true,
       models: [User],
+    }),
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, "..", "static"),
     }),
     UsersModule,
     AuthModule,

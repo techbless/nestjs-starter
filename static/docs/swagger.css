@@ -1,0 +1,75 @@
+.swagger-ui .opblock {
+    border-radius: 1px;
+}
+
+.swagger-ui .opblock-body pre.microlight {
+    border-radius: 1px;
+}
+
+.swagger-ui .opblock .opblock-summary-method {
+    border-radius: 1px;
+}
+
+.swagger-ui select {
+    border-radius: 2px;
+    box-shadow: none;
+}
+
+.swagger-ui .btn {
+    border-radius: 2px;
+}
+
+.swagger-ui .btn-group .btn:first-child {
+    border-radius: 2px 0 0 2px;
+}
+
+.swagger-ui .btn-group .btn:last-child {
+    border-radius: 0 2px 2px 0;
+}
+
+.swagger-ui .btn {
+    box-shadow: none !important;
+}
+
+.swagger-ui .btn.execute {
+    background-color: #1e4e86;
+    border-color: #1e4e86;
+}
+
+.swagger-ui tr.response {
+    border-bottom: 50px solid transparent;
+}
+
+.swagger-ui section.models {
+    border-radius: 2px;
+}
+
+.swagger-ui section.models.is-open .no-margin {
+    display: flex;
+    flex-wrap: wrap;
+    margin: 20px auto;
+    gap: 10px;
+    padding: 0 15px;
+}
+
+.swagger-ui section.models .model-container {
+    border-radius: 2px;
+    display: flex;
+    width: calc(50% - 10px);
+    margin: 0 auto !important;
+    background: rgb(0 0 0 / 2.5%);
+}
+
+.swagger-ui .model-box {
+    padding: 7px;
+}
+
+.swagger-ui section.models .model-container:first-of-type {
+    margin: 15px 20px 15px;
+}
+
+@media all and (max-width: 900px) {
+    .swagger-ui section.models .model-container {
+        width: 100%;
+    }
+}

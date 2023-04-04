@@ -24,6 +24,9 @@ export class SwaggerAPIDocumentation {
     const config = this.getConfig();
     const document = SwaggerModule.createDocument(this.app, config);
 
-    SwaggerModule.setup(this.path, this.app, document);
+    const options = {
+      customCssUrl: ["/docs/swagger.css"],
+    };
+    SwaggerModule.setup(this.path, this.app, document, options);
   }
 }
