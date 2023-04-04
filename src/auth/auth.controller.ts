@@ -1,7 +1,7 @@
-import { Body, Controller, Get, HttpStatus, Post, Req, UseGuards } from "@nestjs/common";
+import { Body, Controller, Get, HttpStatus, Post, Req, Res, UseGuards } from "@nestjs/common";
 import { BaseController } from "../common/controller";
 import { UsersService } from "../users/users.service";
-import { LocalAuthGuard } from "./guards";
+import { AuthenticatedGuard, LocalAuthGuard } from "./guards";
 import CustomError from "../common/custom.error";
 import { LoginDto, RegisterDto } from "./dto/auth.dto";
 
@@ -22,12 +22,25 @@ export class AuthController extends BaseController {
     return req.user;
   }
 
-  @Get("/me")
-  async getLoginUser(@Req() req) {
-    if (!req.user) {
-      throw new CustomError(HttpStatus.UNAUTHORIZED, "Not Logged In", "Please log in first.");
+  @Get("/logout")
+  async logout(@Req() req, @Res() res) {
+    if (!req.isAuthenticated()) {
+      res.json(false);
+      return;
     }
 
+    req.logout(err => {
+      if (err) {
+        res.json(false);
+      } else {
+        res.json(true);
+      }
+    });
+  }
+
+  @UseGuards(AuthenticatedGuard)
+  @Get("/me")
+  async getLoginUser(@Req() req) {
     return req.user;
   }
 }

@@ -1,5 +1,6 @@
-import { CanActivate, ExecutionContext, Injectable } from "@nestjs/common";
+import { CanActivate, ExecutionContext, HttpStatus, Injectable } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
+import CustomError from "../common/custom.error";
 
 @Injectable()
 export class LocalAuthGuard extends AuthGuard("local") {
@@ -17,6 +18,11 @@ export class LocalAuthGuard extends AuthGuard("local") {
 export class AuthenticatedGuard implements CanActivate {
   async canActivate(context: ExecutionContext): Promise<any> {
     const req = context.switchToHttp().getRequest();
-    return req.isAuthenticated();
+
+    if (!req.isAuthenticated()) {
+      throw new CustomError(HttpStatus.UNAUTHORIZED, "Unauthorized", "Please login.");
+    }
+
+    return true;
   }
 }
